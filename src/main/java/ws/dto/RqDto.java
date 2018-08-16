@@ -1,10 +1,10 @@
 package ws.dto;
 
 public class RqDto {
+
     private String name;
 
-    protected RqDto() {
-    }
+    protected RqDto() {}
 
     public RqDto(String name) {
         this.name = name;
