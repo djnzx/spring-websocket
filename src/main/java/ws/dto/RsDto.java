@@ -10,7 +10,7 @@ public class RsDto {
 
     public RsDto(String content) {
         this.content = content;
-        this.id++;
+        RsDto.id++;
     }
 
     public String getContent() {
