@@ -22,7 +22,7 @@ public class AppController {
     @MessageMapping("/hello2")
     // actually "/back/hello2", see WebSocketConfig.java and front.js
     public void listening_from_front(RqDto dto) {
-        System.out.println(dto);
+        System.out.println("OBJECT RECEIVED:" + dto);
     }
 
     // receive and response
@@ -30,6 +30,7 @@ public class AppController {
     // actually "/back/hello", see WebSocketConfig.java and front.js
     @SendTo(WS_PATH) // response path
     public RsDto get_and_respond(RqDto dto) {
+        System.out.println("OBJECT RECEIVED:" + dto);
         return new RsDto(String.format("Hello, %s", HtmlUtils.htmlEscape(dto.getName())));
     }
 
@@ -37,9 +38,17 @@ public class AppController {
     @GetMapping("/a")
     @ResponseBody
     public String from_back_to_front_via_WebSocket() throws InterruptedException {
+        RsDto dto;
         for (int i = 0; i < 10; i++) {
-            template.convertAndSend(WS_PATH,new RsDto("This message sent from code"));
+            System.out.print("Generating new RsDTO...");
+            dto = new RsDto("This message sent from backend Java code");
+            System.out.println("Done");
+            System.out.print("Sending DTO to frontend...");
+            template.convertAndSend(WS_PATH, dto);
+            System.out.println("Done");
+            System.out.print("Sleeping 1s...");
             Thread.sleep(1000);
+            System.out.println("Done");
         }
         template.convertAndSend(WS_PATH,new RsDto("Done"));
         return "10 items sent";
